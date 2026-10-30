@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "allowSyntheticDefaultImports": true,
+    "outDir": "lib",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "strictNullChecks": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "rootDir": ".",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "skipLibCheck": true
+  },
+  "compileOnSave": false,
+  "include": [
+    "src",
+    "config",
+    "types"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

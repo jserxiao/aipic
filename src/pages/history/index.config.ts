@@ -1,0 +1,4 @@
+export default {
+  navigationBarTitleText: '历史记录',
+  enablePullDownRefresh: false,
+}

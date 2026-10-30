@@ -1,0 +1,51 @@
+// ============================================
+// AIPic 黑白简约主题变量
+// ============================================
+
+// 色彩系统
+$color-primary: #000000;
+$color-primary-light: #1A1A1A;
+$color-bg: #FFFFFF;
+$color-bg-secondary: #F5F5F5;
+$color-bg-tertiary: #FAFAFA;
+$color-text-primary: #000000;
+$color-text-secondary: #666666;
+$color-text-placeholder: #999999;
+$color-border: #E5E5E5;
+$color-border-light: #F0F0F0;
+$color-danger: #FF3B30;
+$color-success: #34C759;
+
+// 间距系统
+$spacing-xs: 8rpx;
+$spacing-sm: 16rpx;
+$spacing-md: 24rpx;
+$spacing-lg: 32rpx;
+$spacing-xl: 48rpx;
+$spacing-2xl: 64rpx;
+
+// 圆角系统
+$radius-sm: 8rpx;
+$radius-md: 16rpx;
+$radius-lg: 24rpx;
+$radius-full: 999rpx;
+
+// 字号系统
+$font-size-title: 36rpx;
+$font-size-card-title: 32rpx;
+$font-size-body: 28rpx;
+$font-size-caption: 24rpx;
+$font-size-button: 32rpx;
+
+// 字重系统
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 600;
+
+// 阴影
+$shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+$shadow-md: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 8rpx 32rpx rgba(0, 0, 0, 0.08);
+
+// 过渡
+$transition-base: all 0.2s ease;

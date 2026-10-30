@@ -1,0 +1,60 @@
+.loading-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 96rpx;
+  margin: 0 32rpx;
+  background-color: #000000;
+  border-radius: 16rpx;
+  transition: all 0.2s ease;
+
+  &--disabled {
+    background-color: #999999;
+  }
+
+  &--loading {
+    background-color: #1A1A1A;
+  }
+
+  &__text {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #FFFFFF;
+  }
+
+  &__spinner {
+    display: flex;
+    align-items: center;
+    margin-right: 12rpx;
+    gap: 8rpx;
+  }
+
+  &__dot {
+    width: 12rpx;
+    height: 12rpx;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    animation: loading-bounce 1.4s infinite ease-in-out both;
+
+    &--1 {
+      animation-delay: -0.32s;
+    }
+
+    &--2 {
+      animation-delay: -0.16s;
+    }
+  }
+}
+
+@keyframes loading-bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

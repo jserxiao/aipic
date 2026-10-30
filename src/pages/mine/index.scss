@@ -1,0 +1,291 @@
+.mine-page {
+  min-height: 100vh;
+  background-color: #F5F5F5;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(100rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(100rpx + env(safe-area-inset-bottom));
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 64rpx 32rpx 48rpx;
+    background-color: #FFFFFF;
+  }
+
+  &__avatar-wrapper {
+    position: relative;
+    width: 160rpx;
+    height: 160rpx;
+  }
+
+  &__avatar {
+    width: 160rpx;
+    height: 160rpx;
+    border-radius: 50%;
+    background-color: #F5F5F5;
+
+    &--default {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  // CSS 默认头像图标
+  &__avatar-icon {
+    position: relative;
+    width: 56rpx;
+    height: 56rpx;
+  }
+
+  &__avatar-icon-head {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 20rpx;
+    height: 20rpx;
+    margin-left: -10rpx;
+    background-color: #CCCCCC;
+    border-radius: 50%;
+  }
+
+  &__avatar-icon-body {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 40rpx;
+    height: 28rpx;
+    margin-left: -20rpx;
+    background-color: #CCCCCC;
+    border-radius: 20rpx 20rpx 0 0;
+  }
+
+  &__avatar-edit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 48rpx;
+    height: 48rpx;
+    border-radius: 50%;
+    background-color: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4rpx solid #FFFFFF;
+  }
+
+  // CSS 铅笔图标
+  &__avatar-edit-pencil {
+    width: 16rpx;
+    height: 16rpx;
+    border-right: 4rpx solid #FFFFFF;
+    border-bottom: 4rpx solid #FFFFFF;
+    transform: rotate(-45deg);
+    margin-top: -4rpx;
+  }
+
+  &__id {
+    font-size: 28rpx;
+    color: #000000;
+    font-weight: 500;
+    margin-top: 24rpx;
+    letter-spacing: 2rpx;
+  }
+
+  &__vip {
+    display: flex;
+    align-items: center;
+    margin-top: 16rpx;
+    gap: 12rpx;
+  }
+
+  &__vip-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8rpx 24rpx;
+    border-radius: 999rpx;
+    border: 2rpx solid #E5E5E5;
+    background-color: #FFFFFF;
+
+    &--active {
+      border-color: #000000;
+      background-color: #000000;
+
+      .mine-page__vip-text {
+        color: #FFFFFF;
+      }
+    }
+  }
+
+  &__vip-text {
+    font-size: 22rpx;
+    color: #666666;
+  }
+
+  &__vip-expire {
+    font-size: 22rpx;
+    color: #999999;
+  }
+
+  &__credits {
+    display: flex;
+    align-items: center;
+    gap: 8rpx;
+    margin-top: 24rpx;
+  }
+
+  &__credits-label {
+    font-size: 24rpx;
+    color: #999999;
+  }
+
+  &__credits-value {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #000000;
+  }
+
+  // 功能列表
+  &__list {
+    margin-top: 24rpx;
+    background-color: #FFFFFF;
+  }
+
+  &__list-item {
+    display: flex;
+    align-items: center;
+    padding: 36rpx 32rpx;
+    border-bottom: 2rpx solid #F0F0F0;
+    background: none;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    line-height: 1.5;
+
+    &::after {
+      border: none;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__list-icon {
+    width: 40rpx;
+    height: 40rpx;
+    margin-right: 20rpx;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  // 分享图标 — CSS 绘制（向上箭头 + 向下箭头）
+  &__list-icon--share {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__share-arrow {
+    width: 0;
+    height: 0;
+    border-left: 8rpx solid transparent;
+    border-right: 8rpx solid transparent;
+
+    &--up {
+      border-bottom: 12rpx solid #333333;
+      margin-bottom: 2rpx;
+    }
+
+    &--down {
+      border-top: 12rpx solid #333333;
+      margin-top: 2rpx;
+    }
+  }
+
+  // 时钟图标 — CSS 绘制
+  &__list-icon--clock {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__clock-face {
+    position: relative;
+    width: 32rpx;
+    height: 32rpx;
+    border: 4rpx solid #333333;
+    border-radius: 50%;
+  }
+
+  &__clock-hand {
+    position: absolute;
+    background-color: #333333;
+    border-radius: 2rpx;
+
+    &--v {
+      top: 4rpx;
+      left: 50%;
+      width: 3rpx;
+      height: 12rpx;
+      margin-left: -1.5rpx;
+    }
+
+    &--h {
+      top: 50%;
+      left: 50%;
+      width: 10rpx;
+      height: 3rpx;
+      margin-top: -1.5rpx;
+    }
+  }
+
+  &__list-label {
+    flex: 1;
+    font-size: 30rpx;
+    color: #000000;
+    text-align: left;
+  }
+
+  &__list-badge {
+    font-size: 22rpx;
+    color: #FFFFFF;
+    background-color: #000000;
+    padding: 4rpx 16rpx;
+    border-radius: 999rpx;
+    margin-right: 12rpx;
+    min-width: 32rpx;
+    text-align: center;
+  }
+
+  &__list-arrow {
+    font-size: 36rpx;
+    color: #CCCCCC;
+  }
+
+  // 底部信息
+  &__footer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 48rpx 32rpx 64rpx;
+  }
+
+  &__version {
+    font-size: 24rpx;
+    color: #999999;
+    margin-bottom: 8rpx;
+  }
+
+  &__copyright {
+    font-size: 22rpx;
+    color: #CCCCCC;
+    text-align: center;
+  }
+}

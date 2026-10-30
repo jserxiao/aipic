@@ -1,0 +1,56 @@
+.generate-page {
+  min-height: 100vh;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 200rpx;
+
+  &__section {
+    padding: 32rpx 32rpx 0;
+  }
+
+  &__section-title {
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #000000;
+    display: block;
+    margin-bottom: 20rpx;
+  }
+
+  &__textarea-wrapper {
+    position: relative;
+    background-color: #F5F5F5;
+    border-radius: 16rpx;
+    padding: 24rpx;
+    min-height: 200rpx;
+  }
+
+  &__textarea {
+    width: 100%;
+    min-height: 160rpx;
+    font-size: 28rpx;
+    color: #000000;
+    line-height: 1.6;
+  }
+
+  &__char-count {
+    position: absolute;
+    bottom: 16rpx;
+    right: 24rpx;
+    font-size: 22rpx;
+    color: #999999;
+  }
+
+  &__footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24rpx 0;
+    padding-bottom: calc(24rpx + constant(safe-area-inset-bottom) + 100rpx);
+    padding-bottom: calc(24rpx + env(safe-area-inset-bottom) + 100rpx);
+    background-color: #FFFFFF;
+    border-top: 2rpx solid #F0F0F0;
+    z-index: 100;
+  }
+}

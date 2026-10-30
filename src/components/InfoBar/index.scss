@@ -1,0 +1,32 @@
+.info-bar {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 32rpx;
+  background-color: #F5F5F5;
+  border-radius: 16rpx;
+  margin: 24rpx 32rpx 0;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    flex: 1;
+  }
+
+  &__label {
+    font-size: 26rpx;
+    color: #666666;
+  }
+
+  &__divider {
+    width: 2rpx;
+    height: 24rpx;
+    background-color: #E5E5E5;
+    margin: 0 24rpx;
+  }
+
+  &__warn {
+    font-size: 24rpx;
+    color: #FF3B30;
+    margin-left: 16rpx;
+  }
+}
