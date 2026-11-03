@@ -94,39 +94,88 @@
     letter-spacing: 2rpx;
   }
 
-  &__vip {
+  // ===== VIP 升级长按钮 =====
+  &__vip-bar {
+    width: 100%;
+    margin-top: 24rpx;
     display: flex;
     align-items: center;
-    margin-top: 16rpx;
-    gap: 12rpx;
+    justify-content: space-between;
+    padding: 24rpx 28rpx;
+    border-radius: 20rpx;
+    background: linear-gradient(135deg, #F5D670 0%, #E8C264 30%, #D4A843 100%);
+    box-shadow: 0 4rpx 20rpx rgba(212, 168, 67, 0.25);
   }
 
-  &__vip-badge {
-    display: inline-flex;
+  &__vip-bar-left {
+    display: flex;
     align-items: center;
-    padding: 8rpx 24rpx;
-    border-radius: 999rpx;
-    border: 2rpx solid #E5E5E5;
-    background-color: #FFFFFF;
+    gap: 16rpx;
+  }
 
-    &--active {
-      border-color: #000000;
-      background-color: #000000;
+  &__vip-bar-icon {
+    width: 48rpx;
+    height: 48rpx;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    position: relative;
+    flex-shrink: 0;
 
-      .mine-page__vip-text {
-        color: #FFFFFF;
-      }
+    // 皇冠图标
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -60%);
+      width: 0;
+      height: 0;
+      border-left: 7rpx solid transparent;
+      border-right: 7rpx solid transparent;
+      border-bottom: 14rpx solid #FFFFFF;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 26rpx;
+      height: 4rpx;
+      background-color: #FFFFFF;
+      border-radius: 2rpx;
     }
   }
 
-  &__vip-text {
-    font-size: 22rpx;
-    color: #666666;
+  &__vip-bar-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4rpx;
   }
 
-  &__vip-expire {
-    font-size: 22rpx;
-    color: #999999;
+  &__vip-bar-title {
+    font-size: 30rpx;
+    font-weight: 700;
+    color: #5A3E00;
+  }
+
+  &__vip-bar-sub {
+    font-size: 20rpx;
+    color: rgba(90, 62, 0, 0.65);
+  }
+
+  &__vip-bar-btn {
+    padding: 12rpx 28rpx;
+    border-radius: 999rpx;
+    background-color: #000000;
+    flex-shrink: 0;
+  }
+
+  &__vip-bar-btn-text {
+    font-size: 24rpx;
+    font-weight: 600;
+    color: #FFFFFF;
   }
 
   &__credits {
@@ -145,6 +194,20 @@
     font-size: 32rpx;
     font-weight: 600;
     color: #000000;
+  }
+
+  &__recharge-btn {
+    margin-left: 16rpx;
+    padding: 10rpx 28rpx;
+    border-radius: 999rpx;
+    background-color: #1A73E8;
+    flex-shrink: 0;
+  }
+
+  &__recharge-btn-text {
+    font-size: 24rpx;
+    font-weight: 600;
+    color: #FFFFFF;
   }
 
   // 功能列表

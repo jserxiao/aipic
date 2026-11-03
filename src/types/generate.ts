@@ -4,6 +4,21 @@ export type RatioType = '1:1' | '3:4' | '4:3' | '16:9' | '9:16';
 /** 分辨率类型 */
 export type ResolutionType = '512x512' | '768x768' | '1024x1024' | 'custom';
 
+/** AI 模型类型 */
+export type AIModelType = 'qwen-image-3.0';
+
+/** AI 模型选项 */
+export interface AIModelOption {
+  /** 模型标识 */
+  value: AIModelType;
+  /** 模型名称 */
+  label: string;
+  /** 模型描述 */
+  description: string;
+  /** 每次生成消耗积分 */
+  creditsCost: number;
+}
+
 /** 生成配置 */
 export interface GenerateConfig {
   /** 文字描述 */
@@ -12,6 +27,8 @@ export interface GenerateConfig {
   ratio: RatioType;
   /** 分辨率 */
   resolution: ResolutionType;
+  /** AI 模型 */
+  model: AIModelType;
   /** 自定义宽（resolution 为 custom 时） */
   customWidth?: number;
   /** 自定义高（resolution 为 custom 时） */

@@ -3,7 +3,7 @@
 ## 一、项目概述
 
 ### 1.1 项目名称
-**AIPic** — AI 图片生成工具小程序
+**一键绘图** — AI 图片生成工具小程序
 
 ### 1.2 项目简介
 一款基于 Taro + React 开发的跨平台小程序，用户输入文字描述，自定义图片比例与分辨率，通过 AI 模型生成图片。采用黑白简约设计风格，界面干净、交互简洁。
@@ -128,7 +128,7 @@
 │                             │
 │                             │
 │       v1.0.0                │  ← 版本号
-│   © 2026 AIPic.             │  ← Copyright
+│   © 2026 一键绘图.             │  ← Copyright
 │   All rights reserved.       │
 │                             │
 └─────────────────────────────┘
@@ -410,7 +410,7 @@ const APP_CONFIG = {
 
 4. **底部信息**
    - 版本号 `v1.0.0`
-   - Copyright `© 2026 AIPic. All rights reserved.`
+   - Copyright `© 2026 一键绘图. All rights reserved.`
 
 ### 第四阶段：Mock 数据与 API 层（预计 0.5 天）
 
@@ -510,7 +510,7 @@ export default {
   window: {
     backgroundTextStyle: 'dark',
     navigationBarBackgroundColor: '#FFFFFF',
-    navigationBarTitleText: 'AIPic',
+    navigationBarTitleText: '一键绘图',
     navigationBarTextStyle: 'black',
     backgroundColor: '#FFFFFF',
   },

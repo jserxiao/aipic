@@ -1,8 +1,8 @@
 import { create } from 'zustand'
-import type { GenerateConfig, GenerateRecord, RatioType, ResolutionType } from '@/types/generate'
+import type { GenerateConfig, GenerateRecord, RatioType, ResolutionType, AIModelType } from '@/types/generate'
 import { storage } from '@/utils/storage'
 import { getTodayDate } from '@/utils/format'
-import { STORAGE_KEYS, MAX_DAILY_GENERATE } from '@/constants/config'
+import { STORAGE_KEYS, MAX_DAILY_GENERATE, DEFAULT_MODEL } from '@/constants/config'
 import { generateImage } from '@/services/generate'
 
 interface GenerateState {
@@ -25,6 +25,7 @@ interface GenerateState {
   setResolution: (resolution: ResolutionType) => void
   setCustomSize: (width: number, height: number) => void
   setReferenceImage: (url: string | undefined) => void
+  setModel: (model: AIModelType) => void
   generate: (config: GenerateConfig) => Promise<{ success: boolean; errorMessage?: string }>
   loadHistory: () => void
   clearHistory: () => void
@@ -36,6 +37,7 @@ export const useGenerateStore = create<GenerateState>((set, get) => ({
     prompt: '',
     ratio: '1:1',
     resolution: '1024x1024',
+    model: DEFAULT_MODEL,
     customWidth: 1024,
     customHeight: 1024,
     referenceImage: undefined,
@@ -73,6 +75,12 @@ export const useGenerateStore = create<GenerateState>((set, get) => ({
   setReferenceImage: (url: string | undefined) => {
     set((state) => ({
       config: { ...state.config, referenceImage: url },
+    }))
+  },
+
+  setModel: (model: AIModelType) => {
+    set((state) => ({
+      config: { ...state.config, model },
     }))
   },
 

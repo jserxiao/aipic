@@ -1,3 +1,5 @@
+import type { AIModelOption, AIModelType } from '@/types/generate'
+
 /**
  * 全局配置常量
  */
@@ -5,8 +7,27 @@
 /** 每日最大生成张数 */
 export const MAX_DAILY_GENERATE = 30;
 
-/** 每次生成消耗积分 */
+/** 每次生成消耗积分（默认） */
 export const CREDITS_PER_GENERATE = 10;
+
+/** AI 模型选项 */
+export const AI_MODEL_OPTIONS: AIModelOption[] = [
+  {
+    value: 'qwen-image-3.0',
+    label: 'Qwen-Image-3.0',
+    description: '通义千问图像生成模型',
+    creditsCost: 18,
+  },
+];
+
+/** 默认选中的模型 */
+export const DEFAULT_MODEL: AIModelType = 'qwen-image-3.0';
+
+/** 根据模型获取消耗积分 */
+export function getModelCreditsCost(model: AIModelType): number {
+  const option = AI_MODEL_OPTIONS.find((o) => o.value === model);
+  return option ? option.creditsCost : CREDITS_PER_GENERATE;
+}
 
 /** 小程序版本号 */
 export const APP_VERSION = '1.0.0';
@@ -21,7 +42,7 @@ export const MIN_PROMPT_LENGTH = 2;
 export const MAX_REFERENCE_IMAGES = 1;
 
 /** Copyright 信息 */
-export const COPYRIGHT_TEXT = '© 2026 AIPic. All rights reserved.';
+export const COPYRIGHT_TEXT = '© 2026 一键绘图. All rights reserved.';
 
 /** 图片比例选项 */
 export const RATIO_OPTIONS = [

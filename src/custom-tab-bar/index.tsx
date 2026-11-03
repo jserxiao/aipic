@@ -3,50 +3,51 @@ import { useState, useEffect } from 'react'
 import Taro from '@tarojs/taro'
 import './index.scss'
 
+const TAB_LIST = [
+  {
+    pagePath: '/pages/generate/index',
+    text: '生成',
+    iconType: 'sparkle',
+  },
+  {
+    pagePath: '/pages/mine/index',
+    text: '我的',
+    iconType: 'user',
+  },
+]
+
+/** 事件名：通知 TabBar 更新选中态 */
+const TAB_BAR_SELECT_EVENT = 'TAB_BAR_SELECT'
+
 /**
  * 自定义 TabBar 组件
  * 使用 CSS 绘制的简约图标，无需 PNG 资源
+ *
+ * 选中态同步：页面通过 Taro.eventCenter.trigger(TAB_BAR_SELECT_EVENT, index) 通知
  */
 export default function CustomTabBar() {
   const [selected, setSelected] = useState(0)
-  const [routeName, setRouteName] = useState('')
 
   useEffect(() => {
-    // 获取当前页面路径，判断选中项
-    const pages = Taro.getCurrentPages()
-    const currentPage = pages[pages.length - 1]
-    const route = currentPage ? currentPage.route : ''
-    setRouteName(route)
-
-    if (route.includes('generate')) {
-      setSelected(0)
-    } else if (route.includes('mine')) {
-      setSelected(1)
+    // 监听选中事件
+    const handler = (index: number) => {
+      setSelected(index)
     }
-  })
-
-  const tabList = [
-    {
-      pagePath: '/pages/generate/index',
-      text: '生成',
-      iconType: 'sparkle',
-    },
-    {
-      pagePath: '/pages/mine/index',
-      text: '我的',
-      iconType: 'user',
-    },
-  ]
+    Taro.eventCenter.on(TAB_BAR_SELECT_EVENT, handler)
+    return () => {
+      Taro.eventCenter.off(TAB_BAR_SELECT_EVENT, handler)
+    }
+  }, [])
 
   const handleSwitch = (index: number) => {
-    const url = tabList[index].pagePath
-    Taro.switchTab({ url })
+    if (selected === index) return
     setSelected(index)
+    Taro.switchTab({ url: TAB_LIST[index].pagePath })
   }
 
   return (
     <View className='custom-tabbar'>
-      {tabList.map((tab, index) => {
+      {TAB_LIST.map((tab, index) => {
         const isActive = selected === index
         return (
           <View
@@ -63,4 +64,9 @@ export default function CustomTabBar() {
       })}
     </View>
   )
+}
+
+/** 供页面调用的工具函数：通知 TabBar 更新选中态 */
+export function setTabBarSelected(index: number) {
+  Taro.eventCenter.trigger(TAB_BAR_SELECT_EVENT, index)
 }

@@ -11,6 +11,7 @@ interface UserState {
   fetchUser: () => Promise<void>
   updateAvatar: (avatar: string) => void
   deductCredits: (amount: number) => void
+  addCredits: (amount: number) => void
 }
 
 export const useUserStore = create<UserState>((set, get) => ({
@@ -47,6 +48,14 @@ export const useUserStore = create<UserState>((set, get) => ({
     const current = get().user
     if (!current) return
     const updated = { ...current, credits: Math.max(0, current.credits - amount) }
+    set({ user: updated })
+    storage.set(STORAGE_KEYS.USER_INFO, updated)
+  },
+
+  addCredits: (amount: number) => {
+    const current = get().user
+    if (!current) return
+    const updated = { ...current, credits: current.credits + amount }
     set({ user: updated })
     storage.set(STORAGE_KEYS.USER_INFO, updated)
   },

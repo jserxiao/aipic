@@ -1,15 +1,15 @@
 {
   "miniprogramRoot": "dist/",
   "projectname": "aipic",
-  "description": "AIPic - AI 图片生成工具小程序",
-  "appid": "wx02bb8ea727b9b8f9",
+  "description": "一键绘图 - AI 图片生成工具小程序",
+  "appid": "wx6fd7e11aca5fb41e",
   "setting": {
     "urlCheck": true,
     "es6": false,
     "enhance": false,
     "compileHotReLoad": false,
     "postcss": false,
-    "minified": false,
+    "minified": true,
     "bigPackageSizeSupport": true,
     "compileWorklet": false,
     "uglifyFileName": false,

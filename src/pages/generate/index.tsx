@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react'
 import { View, Text, Textarea } from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import Taro, { useShareAppMessage, useDidShow } from '@tarojs/taro'
 import { useGenerateStore } from '@/store/generateStore'
 import { useUserStore } from '@/store/userStore'
 import InfoBar from '@/components/InfoBar'
 import RatioSelector from '@/components/RatioSelector'
 import ResolutionPicker from '@/components/ResolutionPicker'
 import ImageUploader from '@/components/ImageUploader'
+import ModelSelector from '@/components/ModelSelector'
 import LoadingButton from '@/components/LoadingButton'
 import ResultModal from '@/components/ResultModal'
 import {
-  CREDITS_PER_GENERATE,
   MAX_DAILY_GENERATE,
   MAX_PROMPT_LENGTH,
   MIN_PROMPT_LENGTH,
+  getModelCreditsCost,
 } from '@/constants/config'
 import './index.scss'
 
@@ -28,6 +29,7 @@ export default function Generate() {
     setResolution,
     setCustomSize,
     setReferenceImage,
+    setModel,
     generate,
     loadHistory,
   } = useGenerateStore()
@@ -39,8 +41,14 @@ export default function Generate() {
     loadHistory()
   }, [loadHistory])
 
+  // 页面显示时同步 TabBar 选中态（通过 eventCenter 通知自定义 TabBar）
+  useDidShow(() => {
+    Taro.eventCenter.trigger('TAB_BAR_SELECT', 0)
+  })
+
   const promptLength = config.prompt.length
   const canGenerate = promptLength >= MIN_PROMPT_LENGTH && !generating
+  const creditsCost = getModelCreditsCost(config.model)
 
   const handleGenerate = async () => {
     if (!canGenerate) {
@@ -51,7 +59,7 @@ export default function Generate() {
     }
 
     // 检查积分
-    if (user && user.credits < CREDITS_PER_GENERATE) {
+    if (user && user.credits < creditsCost) {
       Taro.showToast({ title: '积分不足', icon: 'none' })
       return
     }
@@ -68,7 +76,7 @@ export default function Generate() {
     const result = await generate(config)
 
     if (result.success) {
-      deductCredits(CREDITS_PER_GENERATE)
+      deductCredits(creditsCost)
       setShowResult(true)
     } else {
       Taro.showToast({ title: result.errorMessage || '生成失败', icon: 'none' })
@@ -81,11 +89,20 @@ export default function Generate() {
     setPrompt('')
   }
 
+  // 分享小程序
+  useShareAppMessage(() => {
+    return {
+      title: '一键绘图 - AI 图片生成工具，输入文字就能生成图片！',
+      path: '/pages/generate/index',
+      imageUrl: '',
+    }
+  })
+
   return (
     <View className='generate-page'>
       {/* 顶部信息栏 */}
       <InfoBar
-        creditsCost={CREDITS_PER_GENERATE}
+        creditsCost={creditsCost}
         todayCount={todayCount}
         maxDaily={MAX_DAILY_GENERATE}
       />
@@ -126,15 +143,27 @@ export default function Generate() {
         onChange={setReferenceImage}
       />
 
+      {/* AI 模型选择 */}
+      <ModelSelector value={config.model} onChange={setModel} />
+
       {/* 底部生成按钮 */}
       <View className='generate-page__footer'>
-        <LoadingButton
-          text='生 成'
-          loadingText='生成中...'
-          loading={generating}
-          disabled={!canGenerate}
-          onClick={handleGenerate}
-        />
+        <View className='generate-page__footer-bar'>
+          <View className='generate-page__cost-tip'>
+            <Text className='generate-page__cost-label'>消耗</Text>
+            <Text className='generate-page__cost-value'>{creditsCost}</Text>
+            <Text className='generate-page__cost-unit'>积分</Text>
+          </View>
+          <View className='generate-page__btn-wrapper'>
+            <LoadingButton
+              text='生 成'
+              loadingText='生成中...'
+              loading={generating}
+              disabled={!canGenerate}
+              onClick={handleGenerate}
+            />
+          </View>
+        </View>
       </View>
 
       {/* 生成结果弹窗 */}

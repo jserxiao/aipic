@@ -1,0 +1,192 @@
+.recharge-page {
+  min-height: 100vh;
+  background-color: #F0F4FA;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(200rpx + constant(safe-area-inset-bottom));
+  padding-bottom: calc(200rpx + env(safe-area-inset-bottom));
+
+  // ===== 顶部标题区 =====
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48rpx 32rpx 32rpx;
+  }
+
+  &__header-title {
+    font-size: 36rpx;
+    font-weight: 700;
+    color: #1A73E8;
+  }
+
+  &__header-desc {
+    font-size: 24rpx;
+    color: #6699CC;
+    margin-top: 8rpx;
+  }
+
+  // ===== 套餐网格 =====
+  &__grid {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 8rpx 24rpx;
+    gap: 20rpx;
+  }
+
+  &__card {
+    width: calc((100% - 40rpx) / 3);
+    height: 160rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF;
+    border: 3rpx solid #D6E4F5;
+    border-radius: 16rpx;
+    transition: all 0.2s ease;
+
+    &--active {
+      border-color: #1A73E8;
+      background-color: #E8F1FE;
+    }
+  }
+
+  &__card-preset {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8rpx;
+  }
+
+  &__card-price {
+    font-size: 40rpx;
+    font-weight: 700;
+    color: #1A73E8;
+    line-height: 1;
+  }
+
+  &__card-currency {
+    font-size: 24rpx;
+    font-weight: 600;
+  }
+
+  &__card-credits {
+    font-size: 22rpx;
+    color: #6699CC;
+  }
+
+  &__card-custom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__card-custom-text {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #6699CC;
+  }
+
+  // ===== 自定义金额输入 =====
+  &__custom {
+    margin: 24rpx 24rpx 0;
+    padding: 32rpx 24rpx;
+    background-color: #FFFFFF;
+    border-radius: 16rpx;
+    border: 3rpx solid #D6E4F5;
+    display: flex;
+    flex-direction: column;
+    gap: 16rpx;
+  }
+
+  &__custom-label {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #333333;
+  }
+
+  &__custom-input-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: #F0F4FA;
+    border-radius: 12rpx;
+    padding: 0 24rpx;
+    height: 88rpx;
+    border: 2rpx solid #D6E4F5;
+  }
+
+  &__custom-currency {
+    font-size: 32rpx;
+    font-weight: 700;
+    color: #1A73E8;
+    margin-right: 8rpx;
+  }
+
+  &__custom-input {
+    flex: 1;
+    font-size: 36rpx;
+    font-weight: 600;
+    color: #333333;
+  }
+
+  &__custom-credits {
+    font-size: 24rpx;
+    color: #1A73E8;
+  }
+
+  // ===== 底部购买按钮 =====
+  &__footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20rpx 32rpx;
+    padding-bottom: calc(20rpx + constant(safe-area-inset-bottom) + 100rpx);
+    padding-bottom: calc(20rpx + env(safe-area-inset-bottom) + 100rpx);
+    background-color: #FFFFFF;
+    border-top: 2rpx solid #D6E4F5;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 24rpx;
+  }
+
+  &__footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4rpx;
+    flex-shrink: 0;
+  }
+
+  &__footer-label {
+    font-size: 22rpx;
+    color: #999999;
+  }
+
+  &__footer-credits {
+    font-size: 32rpx;
+    font-weight: 700;
+    color: #1A73E8;
+  }
+
+  &__buy-btn {
+    flex: 1;
+    height: 96rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1A73E8;
+    border-radius: 16rpx;
+    transition: all 0.2s ease;
+
+    &--disabled {
+      background-color: #B0C4DE;
+    }
+  }
+
+  &__buy-btn-text {
+    font-size: 32rpx;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+}

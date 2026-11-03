@@ -1,13 +1,27 @@
 export default defineAppConfig({
   pages: [
     'pages/generate/index',
-    'pages/mine/index',
-    'pages/history/index'
+    'pages/mine/index'
   ],
+  subPackages: [
+    {
+      root: 'pages/history',
+      pages: [
+        'index'
+      ]
+    },
+    {
+      root: 'pages/recharge',
+      pages: [
+        'index'
+      ]
+    }
+  ],
+  lazyCodeLoading: 'requiredComponents',
   window: {
     backgroundTextStyle: 'dark',
     navigationBarBackgroundColor: '#FFFFFF',
-    navigationBarTitleText: 'AIPic',
+    navigationBarTitleText: '一键绘图',
     navigationBarTextStyle: 'black',
     backgroundColor: '#FFFFFF'
   },

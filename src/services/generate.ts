@@ -1,5 +1,5 @@
 import type { GenerateConfig, GenerateRecord, GenerateResult } from '@/types/generate'
-import { CREDITS_PER_GENERATE } from '@/constants/config'
+import { getModelCreditsCost } from '@/constants/config'
 
 /**
  * Mock 生成图片
@@ -31,7 +31,7 @@ function mockGenerate(config: GenerateConfig): Promise<GenerateRecord> {
         imageUrl: `https://placehold.co/${size.w}x${size.h}/000000/FFFFFF?text=AI+Generated`,
         status: 'success',
         createdAt: new Date().toISOString(),
-        creditsCost: CREDITS_PER_GENERATE,
+        creditsCost: getModelCreditsCost(config.model),
       })
     }, 2000)
   })

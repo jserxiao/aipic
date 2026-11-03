@@ -1,25 +1,33 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { View, Text, Image, Button } from '@tarojs/components'
-import Taro, { useShareAppMessage } from '@tarojs/taro'
+import Taro, { useShareAppMessage, useDidShow } from '@tarojs/taro'
 import { useUserStore } from '@/store/userStore'
 import { useGenerateStore } from '@/store/generateStore'
 import { APP_VERSION, COPYRIGHT_TEXT } from '@/constants/config'
 import { formatDate } from '@/utils/format'
+import VipUpgradeModal from '@/components/VipUpgradeModal'
+import type { VipPlan } from '@/components/VipUpgradeModal'
 import './index.scss'
 
 export default function Mine() {
   const { user, fetchUser, updateAvatar } = useUserStore()
   const { loadHistory, history } = useGenerateStore()
+  const [vipModalVisible, setVipModalVisible] = useState(false)
 
   useEffect(() => {
     fetchUser()
     loadHistory()
   }, [fetchUser, loadHistory])
 
+  // 页面显示时同步 TabBar 选中态（通过 eventCenter 通知自定义 TabBar）
+  useDidShow(() => {
+    Taro.eventCenter.trigger('TAB_BAR_SELECT', 1)
+  })
+
   // 分享小程序
   useShareAppMessage(() => {
     return {
-      title: 'AIPic - AI 图片生成工具，输入文字就能生成图片！',
+      title: '一键绘图 - AI 图片生成工具，输入文字就能生成图片！',
       path: '/pages/generate/index',
       imageUrl: '',
     }
@@ -44,6 +52,18 @@ export default function Mine() {
   const vipExpireText = user?.vipExpireAt
     ? formatDate(user.vipExpireAt)
     : null
+
+  const handleVipClick = () => {
+    setVipModalVisible(true)
+  }
+
+  const handleVipConfirm = (plan: VipPlan) => {
+    Taro.showToast({
+      title: `已选择${plan.name} ¥${plan.price}`,
+      icon: 'none',
+      duration: 2000,
+    })
+  }
 
   return (
     <View className='mine-page'>
@@ -73,23 +93,30 @@ export default function Mine() {
           ID: {user?.randomId || 'AP_loading...'}
         </Text>
 
-        <View className='mine-page__vip'>
-          {user?.isVip ? (
-            <>
-              <View className='mine-page__vip-badge mine-page__vip-badge--active'>
-                <Text className='mine-page__vip-text'>VIP 会员</Text>
-              </View>
-              {vipExpireText && (
-                <Text className='mine-page__vip-expire'>
+        {/* VIP 升级长按钮 */}
+        <View className='mine-page__vip-bar' onClick={handleVipClick}>
+          <View className='mine-page__vip-bar-left'>
+            <View className='mine-page__vip-bar-icon' />
+            <View className='mine-page__vip-bar-text'>
+              <Text className='mine-page__vip-bar-title'>
+                {user?.isVip ? 'VIP 会员' : '升级VIP'}
+              </Text>
+              {user?.isVip && vipExpireText ? (
+                <Text className='mine-page__vip-bar-sub'>
                   到期：{vipExpireText}
                 </Text>
+              ) : (
+                <Text className='mine-page__vip-bar-sub'>
+                  解锁更多专属权益
+                </Text>
               )}
-            </>
-          ) : (
-            <View className='mine-page__vip-badge'>
-              <Text className='mine-page__vip-text'>普通会员</Text>
             </View>
-          )}
+          </View>
+          <View className='mine-page__vip-bar-btn'>
+            <Text className='mine-page__vip-bar-btn-text'>
+              {user?.isVip ? '续费' : '去升级'}
+            </Text>
+          </View>
         </View>
 
         {/* 积分展示 */}
@@ -98,6 +125,9 @@ export default function Mine() {
           <Text className='mine-page__credits-value'>
             {user?.credits ?? 0}
           </Text>
+          <View className='mine-page__recharge-btn' onClick={() => Taro.navigateTo({ url: '/pages/recharge/index' })}>
+            <Text className='mine-page__recharge-btn-text'>充值</Text>
+          </View>
         </View>
       </View>
 
@@ -137,6 +167,15 @@ export default function Mine() {
         <Text className='mine-page__version'>v{APP_VERSION}</Text>
         <Text className='mine-page__copyright'>{COPYRIGHT_TEXT}</Text>
       </View>
+
+      {/* VIP 升级弹窗 */}
+      <VipUpgradeModal
+        visible={vipModalVisible}
+        onClose={() => setVipModalVisible(false)}
+        onConfirm={handleVipConfirm}
+        isVip={user?.isVip}
+        vipExpireText={vipExpireText}
+      />
     </View>
   )
 }

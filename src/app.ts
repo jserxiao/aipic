@@ -4,7 +4,7 @@ import './app.scss'
 
 function App({ children }: PropsWithChildren<Record<string, unknown>>) {
   useLaunch(() => {
-    console.log('AIPic 小程序启动')
+    console.log('一键绘图 小程序启动')
   })
 
   return children
