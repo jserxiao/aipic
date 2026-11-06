@@ -23,15 +23,21 @@ export default function Generate() {
     config,
     todayCount,
     generating,
+    phase,
+    progress,
+    progressText,
     lastResult,
     setPrompt,
-    setRatio,
+    setRatioWithLinkage,
     setResolution,
     setCustomSize,
     setReferenceImage,
     setModel,
     generate,
+    cancelGenerate,
     loadHistory,
+    saveDraft,
+    loadDraft,
   } = useGenerateStore()
 
   const { user, deductCredits } = useUserStore()
@@ -39,9 +45,14 @@ export default function Generate() {
 
   useEffect(() => {
     loadHistory()
-  }, [loadHistory])
+    loadDraft()
+    return () => {
+      // 离开页面时保存草稿
+      saveDraft()
+    }
+  }, [loadHistory, loadDraft, saveDraft])
 
-  // 页面显示时同步 TabBar 选中态（通过 eventCenter 通知自定义 TabBar）
+  // 页面显示时同步 TabBar 选中态
   useDidShow(() => {
     Taro.eventCenter.trigger('TAB_BAR_SELECT', 0)
   })
@@ -60,7 +71,17 @@ export default function Generate() {
 
     // 检查积分
     if (user && user.credits < creditsCost) {
-      Taro.showToast({ title: '积分不足', icon: 'none' })
+      Taro.showModal({
+        title: '积分不足',
+        content: `本次生成需要 ${creditsCost} 积分，当前剩余 ${user.credits} 积分。是否前往充值？`,
+        confirmText: '去充值',
+        confirmColor: '#000000',
+        success: (res) => {
+          if (res.confirm) {
+            Taro.navigateTo({ url: '/pages/recharge/index' })
+          }
+        },
+      })
       return
     }
 
@@ -117,6 +138,7 @@ export default function Generate() {
             value={config.prompt}
             maxlength={MAX_PROMPT_LENGTH}
             onInput={(e) => setPrompt(e.detail.value)}
+            onBlur={saveDraft}
             autoHeight
           />
           <Text className='generate-page__char-count'>
@@ -125,8 +147,8 @@ export default function Generate() {
         </View>
       </View>
 
-      {/* 比例选择 */}
-      <RatioSelector value={config.ratio} onChange={setRatio} />
+      {/* 比例选择（联动分辨率） */}
+      <RatioSelector value={config.ratio} onChange={setRatioWithLinkage} />
 
       {/* 分辨率选择 */}
       <ResolutionPicker
@@ -146,6 +168,21 @@ export default function Generate() {
       {/* AI 模型选择 */}
       <ModelSelector value={config.model} onChange={setModel} />
 
+      {/* 生成进度条 */}
+      {generating && phase !== 'idle' && (
+        <View className='generate-page__progress'>
+          <View className='generate-page__progress-bar'>
+            <View
+              className='generate-page__progress-fill'
+              style={{ width: `${progress}%` }}
+            />
+          </View>
+          <Text className='generate-page__progress-text'>
+            {progressText}
+          </Text>
+        </View>
+      )}
+
       {/* 底部生成按钮 */}
       <View className='generate-page__footer'>
         <View className='generate-page__footer-bar'>
@@ -155,13 +192,22 @@ export default function Generate() {
             <Text className='generate-page__cost-unit'>积分</Text>
           </View>
           <View className='generate-page__btn-wrapper'>
-            <LoadingButton
-              text='生 成'
-              loadingText='生成中...'
-              loading={generating}
-              disabled={!canGenerate}
-              onClick={handleGenerate}
-            />
+            {generating ? (
+              <View
+                className='generate-page__cancel-btn'
+                onClick={cancelGenerate}
+              >
+                <Text className='generate-page__cancel-btn-text'>取消生成</Text>
+              </View>
+            ) : (
+              <LoadingButton
+                text='生 成'
+                loadingText='生成中...'
+                loading={generating}
+                disabled={!canGenerate}
+                onClick={handleGenerate}
+              />
+            )}
           </View>
         </View>
       </View>

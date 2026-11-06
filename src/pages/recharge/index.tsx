@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { View, Text, Input } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { useUserStore } from '@/store/userStore'
+import { payRecharge } from '@/services/payment'
 import './index.scss'
 
 /** 充值套餐 */
@@ -35,6 +36,7 @@ export default function Recharge() {
   const { addCredits } = useUserStore()
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [customAmount, setCustomAmount] = useState('')
+  const [paying, setPaying] = useState(false)
 
   const selectedPlan = RECHARGE_PLANS[selectedIndex]
   const isCustom = selectedPlan.isCustom
@@ -54,13 +56,13 @@ export default function Recharge() {
     actualCredits = selectedPlan.credits
   }
 
-  const canPurchase = actualPrice > 0 && actualCredits > 0
+  const canPurchase = actualPrice > 0 && actualCredits > 0 && !paying
 
   const handleSelect = (index: number) => {
     setSelectedIndex(index)
   }
 
-  const handleCustomInput = (e: any) => {
+  const handleCustomInput = (e: { detail: { value: string } }) => {
     let val = e.detail.value.replace(/[^\d]/g, '')
     const num = parseInt(val) || 0
     if (num > MAX_CUSTOM) {
@@ -69,25 +71,47 @@ export default function Recharge() {
     setCustomAmount(val)
   }
 
-  const handlePurchase = () => {
+  const handlePurchase = async () => {
     if (!canPurchase) {
       Taro.showToast({ title: '请选择或输入充值金额', icon: 'none' })
       return
     }
 
-    // 模拟充值成功
-    addCredits(actualCredits)
+    setPaying(true)
 
-    Taro.showToast({
-      title: `充值成功 +${actualCredits}积分`,
-      icon: 'none',
-      duration: 1500,
-    })
+    try {
+      const result = await payRecharge(actualPrice, (credits) => {
+        // 支付成功，增加积分
+        addCredits(credits)
+      })
 
-    // 延迟返回我的页面
-    setTimeout(() => {
-      Taro.navigateBack()
-    }, 1500)
+      if (result.success) {
+        Taro.showToast({
+          title: `充值成功 +${result.credits}积分`,
+          icon: 'success',
+          duration: 1500,
+        })
+        // 延迟返回
+        setTimeout(() => {
+          Taro.navigateBack()
+        }, 1500)
+      } else {
+        // 用户取消或支付未确认
+        if (result.errorMessage !== '已取消支付') {
+          Taro.showToast({
+            title: result.errorMessage || '支付失败',
+            icon: 'none',
+          })
+        }
+      }
+    } catch (err) {
+      Taro.showToast({
+        title: err instanceof Error ? err.message : '支付失败',
+        icon: 'none',
+      })
+    } finally {
+      setPaying(false)
+    }
   }
 
   return (
@@ -164,7 +188,7 @@ export default function Recharge() {
           onClick={handlePurchase}
         >
           <Text className='recharge-page__buy-btn-text'>
-            ¥{actualPrice > 0 ? actualPrice : '--'} 立即充值
+            {paying ? '支付中...' : `¥${actualPrice > 0 ? actualPrice : '--'} 立即充值`}
           </Text>
         </View>
       </View>

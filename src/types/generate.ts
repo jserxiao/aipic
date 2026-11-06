@@ -66,3 +66,10 @@ export interface GenerateResult {
   record?: GenerateRecord;
   errorMessage?: string;
 }
+
+/** Taro 输入事件类型（通用） */
+export interface TaroInputEvent {
+  detail: {
+    value: string;
+  };
+}

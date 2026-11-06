@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { View, Text } from '@tarojs/components'
 import { RATIO_OPTIONS } from '@/constants/config'
 import type { RatioType } from '@/types/generate'
@@ -10,15 +10,15 @@ interface RatioSelectorProps {
   onChange: (ratio: RatioType) => void
 }
 
-export default function RatioSelector({ value, onChange }: RatioSelectorProps) {
+const options = RATIO_OPTIONS.map((o) => ({
+  label: o.label,
+  value: o.value as string,
+}))
+
+function RatioSelector({ value, onChange }: RatioSelectorProps) {
   const [visible, setVisible] = useState(false)
 
   const selectedOption = RATIO_OPTIONS.find((o) => o.value === value)
-
-  const options = RATIO_OPTIONS.map((o) => ({
-    label: o.label,
-    value: o.value as string,
-  }))
 
   return (
     <View className='ratio-selector'>
@@ -39,3 +39,5 @@ export default function RatioSelector({ value, onChange }: RatioSelectorProps) {
     </View>
   )
 }
+
+export default memo(RatioSelector)

@@ -104,4 +104,35 @@
       transform: rotate(-45deg);
     }
   }
+
+  /* 上传进度圆圈 */
+  &__progress-circle {
+    width: 56rpx;
+    height: 56rpx;
+    border-radius: 50%;
+    border: 4rpx solid #F0F0F0;
+    border-top-color: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: image-uploader-spin 0.8s linear infinite;
+  }
+
+  &__progress-text {
+    font-size: 20rpx;
+    color: #999999;
+    animation: image-uploader-spin-reverse 0.8s linear infinite;
+  }
+}
+
+@keyframes image-uploader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes image-uploader-spin-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
 }

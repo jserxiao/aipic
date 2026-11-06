@@ -92,4 +92,52 @@
       margin: 0;
     }
   }
+
+  /* 生成进度条 */
+  &__progress {
+    margin: 24rpx 32rpx 0;
+    display: flex;
+    align-items: center;
+    gap: 16rpx;
+  }
+
+  &__progress-bar {
+    flex: 1;
+    height: 8rpx;
+    background-color: #F0F0F0;
+    border-radius: 4rpx;
+    overflow: hidden;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background-color: #000000;
+    border-radius: 4rpx;
+    transition: width 0.3s ease;
+  }
+
+  &__progress-text {
+    font-size: 24rpx;
+    color: #666666;
+    white-space: nowrap;
+    min-width: 160rpx;
+    text-align: right;
+  }
+
+  /* 取消生成按钮 */
+  &__cancel-btn {
+    flex: 1;
+    height: 88rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F5F5F5;
+    border-radius: 16rpx;
+  }
+
+  &__cancel-btn-text {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #666666;
+  }
 }

@@ -67,4 +67,7 @@ export const STORAGE_KEYS = {
   GENERATE_RECORDS: 'aipic_generate_records',
   TODAY_COUNT: 'aipic_today_count',
   TODAY_DATE: 'aipic_today_date',
+  AUTH_TOKEN: 'aipic_auth_token',
+  REFRESH_TOKEN: 'aipic_refresh_token',
+  PROMPT_DRAFT: 'aipic_prompt_draft',
 } as const;

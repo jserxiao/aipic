@@ -17,7 +17,16 @@ export default defineConfig(async (merge) => {
     sourceRoot: 'src',
     outputRoot: 'dist',
     plugins: [],
-    defineConstants: {},
+    defineConstants: {
+      // 编译时常量定义，webpack 会在打包时做文本替换
+      // 开发环境：指向本地 Go 后端 API
+      // 注意：二维码真机预览时必须用电脑局域网 IP，不能用 localhost
+      // 微信小程序开发者工具需勾选「不校验合法域名」
+      'process.env.TARO_APP_API_BASE': '"http://10.21.119.54:8080/api"',
+      'process.env.TARO_APP_USE_MOCK': '"false"',
+      // NODE_ENV 由 Taro 自动注入，这里显式声明以确保类型安全
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+    },
     copy: {
       patterns: [],
       options: {}

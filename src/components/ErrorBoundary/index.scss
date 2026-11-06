@@ -1,0 +1,66 @@
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 48rpx 32rpx;
+
+  &__icon {
+    position: relative;
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+    border: 4rpx solid #FF3B30;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32rpx;
+  }
+
+  &__icon-line {
+    position: absolute;
+    width: 32rpx;
+    height: 4rpx;
+    background-color: #FF3B30;
+    border-radius: 2rpx;
+
+    &--1 {
+      transform: rotate(45deg);
+    }
+
+    &--2 {
+      transform: rotate(-45deg);
+    }
+  }
+
+  &__title {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #000000;
+    margin-bottom: 12rpx;
+  }
+
+  &__desc {
+    font-size: 26rpx;
+    color: #999999;
+    text-align: center;
+    margin-bottom: 40rpx;
+  }
+
+  &__btn {
+    font-size: 28rpx;
+    font-weight: 600;
+    color: #FFFFFF;
+    background-color: #000000;
+    border-radius: 16rpx;
+    padding: 0 48rpx;
+    height: 72rpx;
+    line-height: 72rpx;
+    border: none;
+
+    &::after {
+      border: none;
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { View, Text } from '@tarojs/components'
 import './index.scss'
 
@@ -10,7 +11,7 @@ interface InfoBarProps {
   maxDaily: number
 }
 
-export default function InfoBar({ creditsCost, todayCount, maxDaily }: InfoBarProps) {
+function InfoBar({ creditsCost, todayCount, maxDaily }: InfoBarProps) {
   const remaining = maxDaily - todayCount
 
   return (
@@ -30,3 +31,5 @@ export default function InfoBar({ creditsCost, todayCount, maxDaily }: InfoBarPr
     </View>
   )
 }
+
+export default memo(InfoBar)

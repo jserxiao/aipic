@@ -1,4 +1,9 @@
 export default {
+  defineConstants: {
+    // 生产环境 API 地址
+    // process.env.TARO_APP_API_BASE: '"https://api.aipic.example.com"',
+    // process.env.TARO_APP_USE_MOCK: '"false"',
+  },
   mini: {},
   h5: {
     /**

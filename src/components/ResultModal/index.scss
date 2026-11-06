@@ -9,13 +9,15 @@
   align-items: center;
   justify-content: center;
 
+  /* 进入动画 */
   &__mask {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 0.3s ease;
   }
 
   &__content {
@@ -23,10 +25,25 @@
     width: 600rpx;
     max-height: 90vh;
     background-color: #FFFFFF;
+    transform: scale(0.9);
+    opacity: 0;
+    transition: all 0.3s ease;
     border-radius: 24rpx;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+  }
+
+  /* 显示状态 */
+  &--show {
+    .result-modal__mask {
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .result-modal__content {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
 
   &__header {
@@ -123,6 +140,19 @@
     justify-content: center;
     border-radius: 16rpx;
     transition: all 0.2s ease;
+
+    /* 分享按钮样式（Button 组件） */
+    &--share {
+      background-color: #F5F5F5;
+      border: none;
+      line-height: 88rpx;
+      padding: 0;
+      font-size: inherit;
+
+      &::after {
+        border: none;
+      }
+    }
 
     &--secondary {
       border: 2rpx solid #E5E5E5;

@@ -17,6 +17,17 @@ export default defineAppConfig({
       ]
     }
   ],
+  // 分包预下载：进入主包页面时预加载分包
+  preloadRule: {
+    'pages/generate/index': {
+      network: 'all',
+      packages: ['pages/history', 'pages/recharge'],
+    },
+    'pages/mine/index': {
+      network: 'all',
+      packages: ['pages/history', 'pages/recharge'],
+    },
+  },
   lazyCodeLoading: 'requiredComponents',
   window: {
     backgroundTextStyle: 'dark',

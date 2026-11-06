@@ -1,18 +1,32 @@
 import { useEffect, useState } from 'react'
-import { View, Text, Image } from '@tarojs/components'
-import Taro from '@tarojs/taro'
+import { View, Text, Image, ScrollView } from '@tarojs/components'
+import Taro, { usePullDownRefresh, useReachBottom } from '@tarojs/taro'
 import { useGenerateStore } from '@/store/generateStore'
 import type { GenerateRecord } from '@/types/generate'
 import { formatDateTime } from '@/utils/format'
+import { saveImageToAlbum } from '@/utils/image'
 import './index.scss'
 
 export default function History() {
-  const { history, loadHistory, clearHistory } = useGenerateStore()
+  const { history, loadHistory, removeHistoryRecord, clearHistory, historyLoading } = useGenerateStore()
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
   useEffect(() => {
-    loadHistory()
+    loadHistory(true)
   }, [loadHistory])
+
+  // 下拉刷新
+  usePullDownRefresh(() => {
+    loadHistory(true)
+    setTimeout(() => {
+      Taro.stopPullDownRefresh()
+    }, 1000)
+  })
+
+  // 触底加载更多
+  useReachBottom(() => {
+    useGenerateStore.getState().loadMoreHistory()
+  })
 
   const handlePreview = (record: GenerateRecord) => {
     setPreviewUrl(record.imageUrl)
@@ -22,22 +36,28 @@ export default function History() {
     setPreviewUrl(null)
   }
 
-  const handleSave = (record: GenerateRecord) => {
-    Taro.downloadFile({
-      url: record.imageUrl,
+  const handleSave = async (record: GenerateRecord) => {
+    await saveImageToAlbum(record.imageUrl)
+  }
+
+  // 长按删除单条记录
+  const handleLongPress = (record: GenerateRecord) => {
+    Taro.showActionSheet({
+      itemList: ['删除该记录'],
       success: (res) => {
-        Taro.saveImageToPhotosAlbum({
-          filePath: res.tempFilePath,
-          success: () => {
-            Taro.showToast({ title: '已保存到相册', icon: 'success' })
-          },
-          fail: () => {
-            Taro.showToast({ title: '保存失败，请检查权限', icon: 'none' })
-          },
-        })
-      },
-      fail: () => {
-        Taro.showToast({ title: '下载失败', icon: 'none' })
+        if (res.tapIndex === 0) {
+          Taro.showModal({
+            title: '删除记录',
+            content: '确定要删除这条记录吗？',
+            confirmColor: '#000000',
+            success: (modal) => {
+              if (modal.confirm) {
+                removeHistoryRecord(record.id)
+                Taro.showToast({ title: '已删除', icon: 'success' })
+              }
+            },
+          })
+        }
       },
     })
   }
@@ -50,6 +70,7 @@ export default function History() {
       success: (res) => {
         if (res.confirm) {
           clearHistory()
+          Taro.showToast({ title: '已清空', icon: 'success' })
         }
       },
     })
@@ -76,40 +97,59 @@ export default function History() {
           </View>
 
           {/* 历史记录列表 */}
-          <View className='history-page__list'>
-            {history.map((record) => (
-              <View key={record.id} className='history-page__item'>
-                <Image
-                  className='history-page__item-image'
-                  src={record.imageUrl}
-                  mode='aspectFill'
-                  onClick={() => handlePreview(record)}
-                />
-                <View className='history-page__item-info'>
-                  <Text className='history-page__item-prompt'>
-                    {record.prompt}
-                  </Text>
-                  <View className='history-page__item-meta'>
-                    <Text className='history-page__item-tag'>
-                      {record.ratio}
+          <ScrollView
+            scrollY
+            className='history-page__scroll'
+            onScrollToLower={() => useGenerateStore.getState().loadMoreHistory()}
+            lowerThreshold={100}
+          >
+            <View className='history-page__list'>
+              {history.map((record) => (
+                <View
+                  key={record.id}
+                  className='history-page__item'
+                  onLongPress={() => handleLongPress(record)}
+                >
+                  <Image
+                    className='history-page__item-image'
+                    src={record.imageUrl}
+                    mode='aspectFill'
+                    lazyLoad
+                    onClick={() => handlePreview(record)}
+                  />
+                  <View className='history-page__item-info'>
+                    <Text className='history-page__item-prompt'>
+                      {record.prompt}
                     </Text>
-                    <Text className='history-page__item-tag'>
-                      {record.resolution}
+                    <View className='history-page__item-meta'>
+                      <Text className='history-page__item-tag'>
+                        {record.ratio}
+                      </Text>
+                      <Text className='history-page__item-tag'>
+                        {record.resolution}
+                      </Text>
+                    </View>
+                    <Text className='history-page__item-time'>
+                      {formatDateTime(record.createdAt)}
                     </Text>
                   </View>
-                  <Text className='history-page__item-time'>
-                    {formatDateTime(record.createdAt)}
-                  </Text>
+                  <View
+                    className='history-page__item-save'
+                    onClick={() => handleSave(record)}
+                  >
+                    <Text className='history-page__item-save-text'>保存</Text>
+                  </View>
                 </View>
-                <View
-                  className='history-page__item-save'
-                  onClick={() => handleSave(record)}
-                >
-                  <Text className='history-page__item-save-text'>保存</Text>
-                </View>
+              ))}
+            </View>
+
+            {/* 底部加载状态 */}
+            {historyLoading && (
+              <View className='history-page__loading-more'>
+                <Text className='history-page__loading-more-text'>加载中...</Text>
               </View>
-            ))}
-          </View>
+            )}
+          </ScrollView>
         </>
       )}
 

@@ -1,20 +1,21 @@
+import { memo } from 'react'
 import { View, Text } from '@tarojs/components'
 import './index.scss'
 
 interface LoadingButtonProps {
   /** 按钮文字 */
-  text: string;
+  text: string
   /** 加载中文字 */
-  loadingText?: string;
+  loadingText?: string
   /** 是否加载中 */
-  loading: boolean;
+  loading: boolean
   /** 是否禁用 */
-  disabled?: boolean;
+  disabled?: boolean
   /** 点击回调 */
-  onClick: () => void;
+  onClick: () => void
 }
 
-export default function LoadingButton({
+function LoadingButton({
   text,
   loadingText = '生成中...',
   loading,
@@ -41,3 +42,5 @@ export default function LoadingButton({
     </View>
   )
 }
+
+export default memo(LoadingButton)

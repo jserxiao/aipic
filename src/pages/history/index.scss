@@ -153,4 +153,22 @@
     width: 100%;
     max-height: 80vh;
   }
+
+  // 滚动容器
+  &__scroll {
+    height: calc(100vh - 120rpx);
+  }
+
+  // 加载更多
+  &__loading-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32rpx 0;
+  }
+
+  &__loading-more-text {
+    font-size: 24rpx;
+    color: #999999;
+  }
 }

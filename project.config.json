@@ -4,7 +4,7 @@
   "description": "一键绘图 - AI 图片生成工具小程序",
   "appid": "wx6fd7e11aca5fb41e",
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": false,
     "enhance": false,
     "compileHotReLoad": false,

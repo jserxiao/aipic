@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { View, Text, Image } from '@tarojs/components'
 import Taro from '@tarojs/taro'
+import { uploadImage } from '@/services/upload'
 import './index.scss'
 
 interface ImageUploaderProps {
@@ -16,15 +18,34 @@ export default function ImageUploader({
   maxCount = 1,
   onChange,
 }: ImageUploaderProps) {
+  const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+
   const handleChooseImage = () => {
     Taro.chooseImage({
       count: maxCount,
       sizeType: ['compressed'],
       sourceType: ['album', 'camera'],
-      success: (res) => {
+      success: async (res) => {
         const tempFilePaths = res.tempFilePaths
         if (tempFilePaths.length > 0) {
-          onChange(tempFilePaths[0])
+          const tempPath = tempFilePaths[0]
+          setUploading(true)
+          setUploadProgress(0)
+          try {
+            const url = await uploadImage(tempPath, (progress) => {
+              setUploadProgress(progress)
+            })
+            onChange(url)
+          } catch (err) {
+            Taro.showToast({
+              title: err instanceof Error ? err.message : '上传失败',
+              icon: 'none',
+            })
+          } finally {
+            setUploading(false)
+            setUploadProgress(0)
+          }
         }
       },
     })
@@ -39,7 +60,7 @@ export default function ImageUploader({
     <View className='image-uploader'>
       <Text className='image-uploader__title'>参考图（可选）</Text>
       <View className='image-uploader__area'>
-        {imageUrl ? (
+        {imageUrl && !uploading ? (
           <View className='image-uploader__preview'>
             <Image
               className='image-uploader__img'
@@ -50,6 +71,13 @@ export default function ImageUploader({
               <View className='image-uploader__remove-line image-uploader__remove-line--1' />
               <View className='image-uploader__remove-line image-uploader__remove-line--2' />
             </View>
+          </View>
+        ) : uploading ? (
+          <View className='image-uploader__placeholder'>
+            <View className='image-uploader__progress-circle'>
+              <Text className='image-uploader__progress-text'>{uploadProgress}%</Text>
+            </View>
+            <Text className='image-uploader__hint'>上传中...</Text>
           </View>
         ) : (
           <View className='image-uploader__placeholder' onClick={handleChooseImage}>

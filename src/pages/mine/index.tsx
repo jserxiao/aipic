@@ -7,10 +7,14 @@ import { APP_VERSION, COPYRIGHT_TEXT } from '@/constants/config'
 import { formatDate } from '@/utils/format'
 import VipUpgradeModal from '@/components/VipUpgradeModal'
 import type { VipPlan } from '@/components/VipUpgradeModal'
+import { createVipOrder } from '@/services/payment'
+import { USE_MOCK } from '@/services/request'
+import { request } from '@/services/request'
+import { UserSkeleton } from '@/components/Skeleton'
 import './index.scss'
 
 export default function Mine() {
-  const { user, fetchUser, updateAvatar } = useUserStore()
+  const { user, fetchUser, updateAvatar, addCredits, loading } = useUserStore()
   const { loadHistory, history } = useGenerateStore()
   const [vipModalVisible, setVipModalVisible] = useState(false)
 
@@ -57,17 +61,57 @@ export default function Mine() {
     setVipModalVisible(true)
   }
 
-  const handleVipConfirm = (plan: VipPlan) => {
-    Taro.showToast({
-      title: `已选择${plan.name} ¥${plan.price}`,
-      icon: 'none',
-      duration: 2000,
-    })
+  const handleVipConfirm = async (plan: VipPlan) => {
+    try {
+      const order = await createVipOrder(plan.type)
+
+      // Mock 模式下直接成功
+      if (!USE_MOCK) {
+        // 开发模式：后端返回 mock 支付参数时，走模拟确认流程
+        const isMockPay = order.payParams.paySign === 'mock_sign'
+        if (isMockPay) {
+          await request({
+            url: '/payment/mock-confirm',
+            method: 'POST',
+            data: { orderId: order.orderId },
+          })
+        } else {
+          // 真实微信支付
+          await Taro.requestPayment({
+            timeStamp: order.payParams.timeStamp,
+            nonceStr: order.payParams.nonceStr,
+            package: order.payParams.package,
+            signType: order.payParams.signType as 'MD5' | 'HMAC-SHA256' | 'RSA',
+            paySign: order.payParams.paySign,
+          })
+        }
+      }
+
+      // 支付成功，增加积分
+      addCredits(plan.bonusCredits)
+
+      Taro.showToast({
+        title: `开通成功 +${plan.bonusCredits}积分`,
+        icon: 'success',
+        duration: 2000,
+      })
+    } catch (err) {
+      if (err instanceof Error && err.message.includes('cancel')) {
+        return
+      }
+      Taro.showToast({
+        title: err instanceof Error ? err.message : '支付失败',
+        icon: 'none',
+      })
+    }
   }
 
   return (
     <View className='mine-page'>
       {/* 顶部用户信息 */}
+      {loading && !user ? (
+        <UserSkeleton />
+      ) : (
       <View className='mine-page__header'>
         <View className='mine-page__avatar-wrapper' onClick={handleAvatarClick}>
           {user?.avatar ? (
@@ -130,8 +174,7 @@ export default function Mine() {
           </View>
         </View>
       </View>
-
-      {/* 中部功能列表 */}
+      )}
       <View className='mine-page__list'>
         <Button
           className='mine-page__list-item'
